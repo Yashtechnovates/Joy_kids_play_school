@@ -1,4 +1,6 @@
-import { motion } from 'framer-motion';
+/* eslint-disable no-unused-vars */
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 import { 
   RocketLaunchIcon, 
   SwatchIcon, 
@@ -7,29 +9,18 @@ import {
   HomeIcon,
   GlobeAltIcon,
   ShieldCheckIcon,
-  HeartIcon
+  HeartIcon,
+  SparklesIcon
 } from '@heroicons/react/24/solid';
 import MainLayout from '../layouts/MainLayout';
+import IndoorGames from '../components/playMaterial/IndoorGames';
+import OutdoorGames from '../components/playMaterial/OutdoorGames';
 
 const PlayMaterial = () => {
-  const indoorGames = [
-    { name: 'Building Blocks', icon: CubeIcon, color: 'from-blue-400 to-cyan-500', desc: 'Creative construction sets' },
-    { name: 'Puzzle Toys', icon: SwatchIcon, color: 'from-purple-400 to-pink-500', desc: 'Brain development games' },
-    { name: 'Toy Cars', icon: RocketLaunchIcon, color: 'from-red-400 to-orange-500', desc: 'Mini vehicle collection' },
-    { name: 'Musical Toys', icon: MusicalNoteIcon, color: 'from-green-400 to-emerald-500', desc: 'Sound and rhythm play' },
-  ];
-
-  const outdoorGames = [
-    { name: 'Slides', icon: RocketLaunchIcon, color: 'from-orange-400 to-red-500' },
-    { name: 'Swings', icon: HeartIcon, color: 'from-pink-400 to-rose-500' },
-    { name: 'Ball Pool', icon: GlobeAltIcon, color: 'from-blue-400 to-indigo-500' },
-    { name: 'Trampoline', icon: HomeIcon, color: 'from-green-400 to-teal-500' },
-  ];
-
   const stats = [
-    { value: '50+', label: 'Play Equipments', icon: CubeIcon },
-    { value: '100%', label: 'Safe Environment', icon: ShieldCheckIcon },
-    { value: '300+', label: 'Happy Kids', icon: HeartIcon },
+    { value: '50+', label: 'Play Equipments', icon: CubeIcon, description: 'Variety of engaging toys' },
+    { value: '100%', label: 'Safe Environment', icon: ShieldCheckIcon, description: 'Child-safe certified' },
+    { value: '300+', label: 'Happy Kids', icon: HeartIcon, description: 'Loving our play area' },
   ];
 
   const safetyFeatures = [
@@ -71,57 +62,46 @@ const PlayMaterial = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
-              className="glass-card rounded-2xl p-6 text-center"
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="glass-card rounded-2xl p-6 text-center group cursor-pointer"
             >
-              <stat.icon className="w-16 h-16 mx-auto mb-4 text-purple-500" />
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                <stat.icon className="w-16 h-16 mx-auto mb-4 text-purple-500 group-hover:scale-110 transition-transform duration-300" />
+              </div>
               <div className="text-4xl font-bold gradient-text">{stat.value}</div>
-              <div className="text-gray-600 mt-2">{stat.label}</div>
+              <div className="text-gray-600 mt-2 font-semibold">{stat.label}</div>
+              <div className="text-gray-500 text-sm mt-1">{stat.description}</div>
             </motion.div>
           ))}
         </div>
 
-        {/* Indoor Games */}
+        {/* Indoor Games Section with Sliding Animation */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
         >
-          <h2 className="text-3xl font-bold gradient-text mb-6">🎪 Indoor Play Materials</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {indoorGames.map((game, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.05, rotate: 2 }}
-                className={`rounded-2xl p-6 bg-gradient-to-br ${game.color} text-white cursor-pointer`}
-              >
-                <game.icon className="w-16 h-16 mb-4" />
-                <h3 className="text-xl font-bold mb-2">{game.name}</h3>
-                <p className="opacity-90 text-sm">{game.desc}</p>
-              </motion.div>
-            ))}
+          <div className="flex items-center gap-3 mb-6">
+            <SparklesIcon className="w-8 h-8 text-purple-500" />
+            <h2 className="text-3xl font-bold gradient-text">🎪 Indoor Play Materials</h2>
           </div>
+          <IndoorGames />
         </motion.div>
 
-        {/* Outdoor Games */}
+        {/* Outdoor Games Section with Sliding Animation */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          initial={{ opacity: 0, x: 100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
         >
-          <h2 className="text-3xl font-bold gradient-text mb-6">🌳 Outdoor Play Area</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {outdoorGames.map((game, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.05 }}
-                className={`rounded-2xl p-6 bg-gradient-to-br ${game.color} text-white text-center`}
-              >
-                <game.icon className="w-20 h-20 mx-auto mb-4" />
-                <h3 className="text-xl font-bold">{game.name}</h3>
-              </motion.div>
-            ))}
+          <div className="flex items-center gap-3 mb-6 mt-12">
+            <SparklesIcon className="w-8 h-8 text-green-500" />
+            <h2 className="text-3xl font-bold gradient-text">🌳 Outdoor Play Area</h2>
           </div>
+          <OutdoorGames />
         </motion.div>
 
         {/* Safety Features */}
@@ -139,7 +119,8 @@ const PlayMaterial = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="flex items-center gap-3 p-3 rounded-lg bg-green-50"
+                whileHover={{ scale: 1.02, x: 10 }}
+                className="flex items-center gap-3 p-3 rounded-lg bg-green-50 cursor-pointer"
               >
                 <ShieldCheckIcon className="w-6 h-6 text-green-600" />
                 <span className="text-gray-700">{feature}</span>
